@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orvixa</title>
+<link rel="manifest" href="manifest.json">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#f5f6f8;color:#171717;padding-bottom:75px}
+
+header{
+background:#111827;color:white;padding:18px;position:sticky;top:0;z-index:10
+}
+.top{display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:28px;font-weight:bold}
+.cartIcon{font-size:25px;position:relative}
+.badge{
+position:absolute;background:#ef4444;color:white;border-radius:50%;
+font-size:11px;padding:3px 6px;top:-8px;right:-8px
+}
+
+.search{margin-top:15px}
+.search input{
+width:100%;padding:14px;border:0;border-radius:10px;
+font-size:16px;outline:none
+}
+
+.banner{
+margin:15px;padding:25px;border-radius:16px;
+background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white
+}
+.banner h1{font-size:26px;margin-bottom:8px}
+.banner p{margin-bottom:15px}
+.banner button{
+border:0;padding:11px 20px;border-radius:9px;
+font-weight:bold;color:#4f46e5
+}
+
+h2{margin:20px 15px 12px}
+
+.categories{
+display:flex;gap:10px;overflow-x:auto;padding:0 15px
+}
+.category{
+background:white;padding:12px 18px;border-radius:22px;
+white-space:nowrap;box-shadow:0 2px 8px #ddd
+}
+
+.products{
+display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 15px
+}
+.product{
+background:white;border-radius:14px;overflow:hidden;
+box-shadow:0 2px 8px #ddd
+}
+.product img{width:100%;height:150px;object-fit:cover}
+.info{padding:10px}
+.info h3{font-size:15px;margin-bottom:5px}
+.rating{color:#f59e0b;margin:5px 0}
+.price{font-size:18px;font-weight:bold;margin:6px 0 10px}
+.add{
+width:100%;padding:10px;border:0;border-radius:8px;
+background:#111827;color:white;font-weight:bold
+}
+.heart{
+float:right;border:0;background:none;font-size:21px
+}
+
+#cartPage,#wishlistPage{display:none;padding:15px}
+.item{
+background:white;margin-bottom:12px;padding:15px;
+border-radius:12px;box-shadow:0 2px 7px #ddd
+}
+.item button{
+margin-top:8px;padding:8px 12px;border:0;border-radius:7px;
+background:#ef4444;color:white
+}
+.empty{text-align:center;margin-top:70px;color:#777;font-size:18px}
+
+nav{
+position:fixed;bottom:0;left:0;right:0;background:white;
+display:flex;justify-content:space-around;padding:10px 5px;
+box-shadow:0 -2px 10px #ddd;z-index:20
+}
+nav button{border:0;background:none;font-size:12px}
+nav span{display:block;font-size:21px;margin-bottom:3px}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="top">
+<div class="logo">ORVIXA</div>
+<div class="cartIcon">🛒
+<span class="badge" id="cartCount">0</span>
+</div>
+</div>
+
+<div class="search">
+<input id="search" type="text"
+placeholder="Search products..." oninput="searchProducts()">
+</div>
+</header>
+
+<div id="homePage">
+
+<section class="banner">
+<h1>Big Deals 🔥</h1>
+<p>Discover amazing products at great prices.</p>
+<button onclick="scrollProducts()">Shop Now</button>
+</section>
+
+<h2>Categories</h2>
+
+<div class="categories">
+<div class="category">👕 Fashion</div>
+<div class="category">📱 Electronics</div>
+<div class="category">👟 Shoes</div>
+<div class="category">💄 Beauty</div>
+<div class="category">🏠 Home</div>
+</div>
+
+<h2>Popular Products</h2>
+
+<div class="products" id="products">
+
+<div class="product" data-name="Classic Watch">
+<img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80">
+<div class="info">
+<button class="heart" onclick="wishlist('Classic Watch',1499)">♡</button>
+<h3>Classic Watch</h3>
+<div class="rating">★★★★★</div>
+<div class="price">₹1,499</div>
+<button class="add" onclick="addCart('Classic Watch',1499)">Add to Cart</button>
+</div>
+</div>
+
+<div class="product" data-name="Sport Shoes">
+<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80">
+<div class="info">
+<button class="heart" onclick="wishlist('Sport Shoes',2199)">♡</button>
+<h3>Sport Shoes</h3>
+<div class="rating">★★★★☆</div>
+<div class="price">₹2,199</div>
+<button class="add" onclick="addCart('Sport Shoes',2199)">Add to Cart</button>
+</div>
+</div>
+
+<div class="product" data-name="Wireless Headphones">
+<img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=500&q=80">
+<div class="info">
+<button class="heart" onclick="wishlist('Wireless Headphones',1999)">♡</button>
+<h3>Wireless Headphones</h3>
+<div class="rating">★★★★★</div>
+<div class="price">₹1,999</div>
+<button class="add" onclick="addCart('Wireless Headphones',1999)">Add to Cart</button>
+</div>
+</div>
+
+<div class="product" data-name="Premium T-Shirt">
+<img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=500&q=80">
+<div class="info">
+<button class="heart" onclick="wishlist('Premium T-Shirt',699)">♡</button>
+<h3>Premium T-Shirt</h3>
+<div class="rating">★★★★☆</div>
+<div class="price">₹699</div>
+<button class="add" onclick="addCart('Premium T-Shirt',699)">Add to Cart</button>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id="cartPage">
+<h2>🛒 My Cart</h2>
+<div id="cartItems"></div>
+<h2 id="total"></h2>
+</div>
+
+<div id="wishlistPage">
+<h2>❤️ Wishlist</h2>
+<div id="wishlistItems"></div>
+</div>
+
+<nav>
+<button onclick="showHome()">🏠<span>Home</span></button>
+<button onclick="focusSearch()">🔍<span>Search</span></button>
+<button onclick="showWishlist()">❤️<span>Wishlist</span></button>
+<button onclick="showCart()">🛒<span>Cart</span></button>
+<button onclick="profile()">👤<span>Profile</span></button>
+</nav>
+
+<script>
+
+let cart=[];
+let wish=[];
+
+function addCart(name,price){
+cart.push({name,price});
+document.getElementById("cartCount").innerText=cart.length;
+alert(name+" added to cart 🛒");
+}
+
+function showCart(){
+document.getElementById("homePage").style.display="none";
+document.getElementById("wishlistPage").style.display="none";
+document.getElementById("cartPage").style.display="block";
+
+let box=document.getElementById("cartItems");
+
+if(cart.length===0){
+box.innerHTML='<div class="empty">Your cart is empty 🛒</div>';
+document.getElementById("total").innerText="";
+return;
+}
+
+let total=0;
+box.innerHTML="";
+
+cart.forEach((item,index)=>{
+total+=item.price;
+
+box.innerHTML+=`
+<div class="item">
+<b>${item.name}</b>
+<br>₹${item.price.toLocaleString("en-IN")}
+<br>
+<button onclick="removeCart(${index})">Remove</button>
+</div>`;
+});
+
+document.getElementById("total").innerText=
+"Total: ₹"+total.toLocaleString("en-IN");
+}
+
+function removeCart(index){
+cart.splice(index,1);
+document.getElementById("cartCount").innerText=cart.length;
+showCart();
+}
+
+function wishlist(name,price){
+let exists=wish.find(x=>x.name===name);
+
+if(!exists){
+wish.push({name,price});
+alert(name+" added to wishlist ❤️");
+}else{
+alert("Already in wishlist ❤️");
+}
+}
+
+function showWishlist(){
+document.getElementById("homePage").style.display="none";
+document.getElementById("cartPage").style.display="none";
+document.getElementById("wishlistPage").style.display="block";
+
+let box=document.getElementById("wishlistItems");
+
+if(wish.length===0){
+box.innerHTML='<div class="empty">Wishlist is empty ❤️</div>';
+return;
+}
+
+box.innerHTML="";
+
+wish.forEach((item,index)=>{
+box.innerHTML+=`
+<div class="item">
+<b>${item.name}</b>
+<br>₹${item.price.toLocaleString("en-IN")}
+<br>
+<button onclick="wish.splice(${index},1);showWishlist()">Remove</button>
+</div>`;
+});
+}
+
+function showHome(){
+document.getElementById("homePage").style.display="block";
+document.getElementById("cartPage").style.display="none";
+document.getElementById("wishlistPage").style.display="none";
+}
+
+function focusSearch(){
+showHome();
+document.getElementById("search").focus();
+}
+
+function searchProducts(){
+let value=document.getElementById("search").value.toLowerCase();
+
+document.querySelectorAll(".product").forEach(product=>{
+let name=product.dataset.name.toLowerCase();
+
+product.style.display=name.includes(value) ? "block" : "none";
+});
+}
+
+function scrollProducts(){
+document.getElementById("products").scrollIntoView({
+behavior:"smooth"
+});
+}
+
+function profile(){
+alert("Orvixa Profile 👤\n\nProfile page coming soon!");
+}
+
+</script>
+
+</body>
+</html>
